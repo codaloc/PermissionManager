@@ -1,6 +1,8 @@
+from permissions import PermissionsUI
 import tkinter as tk
 import os
-class UI:
+
+class ExplorerUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("1000x500")
@@ -43,6 +45,10 @@ class UI:
         self.show_directories_checkbox = tk.Checkbutton(self.checkbox_frame, text="Show directories", font=("Arial", 15),background="white", variable=self.show_directories_value, command=self.draw_files)
         self.show_directories_checkbox.pack(side=tk.LEFT, padx=10)
 
+
+        self.folder_permissions_button = tk.Button(self.checkbox_frame, text="Folder Permissions", font=("Arial", 15),background="white", border=0, command=self.spawn_permissions_window_folder)
+        self.folder_permissions_button.pack(side=tk.LEFT, padx=10)
+
         # Files
         self.filesframe = tk.Frame(self.root,background="white")
         self.filesframe.pack(fill=tk.X, padx=20, side=tk.TOP, expand=False)
@@ -74,6 +80,12 @@ class UI:
         self.last_height = new_height
         self.draw_files()
 
+
+    def spawn_permissions_window_folder(self):
+        permissions_window = PermissionsUI(self.path)
+
+    def spawn_permissions_window_file(self,file_path):
+        permissions_window = PermissionsUI(file_path)
 
 
     def get_file_list(self):
@@ -148,6 +160,12 @@ class UI:
 
         self.draw_files()
 
+    def file_or_folder_clicked(self, full_path):
+        if os.path.isdir(full_path):
+            self.update_path(full_path)
+        else:
+            self.spawn_permissions_window_file(full_path)
+
     def shortcut(self, event):
         if event.keysym == "Return":
             self.update_path(self.pathbox.get().rstrip())
@@ -184,11 +202,11 @@ class File:
             border=0,
             height=3, 
             wraplength=150, 
-            command=lambda: ui_instance.update_path(full_path)
+            command=lambda: ui_instance.file_or_folder_clicked(full_path)
         )
 
         
     def draw(self):
         self.widget.grid(row=self.location[0], column=self.location[1], padx=10, pady=10, sticky='nsew')  
 
-UI()
+ExplorerUI()

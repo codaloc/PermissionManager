@@ -6,11 +6,15 @@ from tkinter import font
 
 
 
-class UI:
-    def __init__(self):
-        self.root = tk.Tk()
+class PermissionsUI:
+    def __init__(self, path):
+        if __name__ == "__main__":
+            self.root = tk.Tk()
+        else:
+            self.root = tk.Toplevel()
+            self.root.grab_set()
         self.root.geometry("1000x500")
-        self.root.title("Window")
+        self.root.title("Permissions")
         self.root.option_add("*Background", "white")
         self.root.configure(bg="white")
 
@@ -123,14 +127,21 @@ class UI:
         self.button_frame = tk.Frame(self.root)
         self.button_frame.pack(side=tk.TOP, padx=5)
 
-        self.refresh_button = tk.Button(self.button_frame, text="Refresh", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.get_perms)
+        self.refresh_button = tk.Button(self.button_frame, text="Refresh Perms", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.get_perms)
         self.refresh_button.pack(side=tk.LEFT, padx=5, pady=5)
-        self.set_button = tk.Button(self.button_frame, text="Preview", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.preview_perms)
+        self.set_button = tk.Button(self.button_frame, text="Preview Perms", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.preview_perms)
         self.set_button.pack(side=tk.LEFT, padx=5, pady=5)
-        self.change_button = tk.Button(self.button_frame, text="Change", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.set_command)
+        self.change_button = tk.Button(self.button_frame, text="Preview Command", font=("monospace",14), border=0, bg="gainsboro", activeforeground="grey", command=self.set_command)
         self.change_button.pack(side=tk.LEFT, padx=5, pady=5)
         self.run_button = tk.Button(self.button_frame, text="Run", border=0, font=("monospace",14), bg="salmon", activeforeground="white", activebackground="red", command=self.run_command)
         #self.run_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+
+
+        if __name__ != "__main__":
+            self.textbox1.insert(0, path)
+            self.get_perms()
+
 
 
         self.root.mainloop()
@@ -328,5 +339,5 @@ class UI:
         return octalperms
 
             
-
-UI()
+if __name__ == "__main__":
+    PermissionsUI("/home")
