@@ -39,6 +39,10 @@
 
 ## To Do
 - Autocorrect of capitalization of file/directory names
+- scrollbar
+- since grab is prevented, add close/ok/done button to permission editor
+- file size control
+- config via TOML file
 - View and edit file/folder ownership
 - Run privileged commands via sudo
 - Update preview
