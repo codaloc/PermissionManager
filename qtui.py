@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui.ui'
+# Form implementation generated from reading ui file 'qtui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -15,7 +15,7 @@ class Ui_main_window(object):
     def setupUi(self, main_window):
         main_window.setObjectName("main_window")
         main_window.setEnabled(True)
-        main_window.resize(858, 671)
+        main_window.resize(1008, 595)
         self.centralwidget = QtWidgets.QWidget(main_window)
         self.centralwidget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.centralwidget.setAutoFillBackground(False)
@@ -41,6 +41,10 @@ class Ui_main_window(object):
         self.show_hidden_checkbox = QtWidgets.QCheckBox(self.centralwidget)
         self.show_hidden_checkbox.setObjectName("show_hidden_checkbox")
         self.bottom_input_layout.addWidget(self.show_hidden_checkbox)
+        self.altsort_checkbox = QtWidgets.QCheckBox(self.centralwidget)
+        self.altsort_checkbox.setTristate(True)
+        self.altsort_checkbox.setObjectName("altsort_checkbox")
+        self.bottom_input_layout.addWidget(self.altsort_checkbox)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.bottom_input_layout.addItem(spacerItem)
         self.text_label = QtWidgets.QLabel(self.centralwidget)
@@ -56,7 +60,7 @@ class Ui_main_window(object):
         self.top_layout.addLayout(self.input_layout)
         self.button_layout = QtWidgets.QVBoxLayout()
         self.button_layout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
-        self.button_layout.setContentsMargins(0, -1, 0, -1)
+        self.button_layout.setContentsMargins(0, 8, 0, -1)
         self.button_layout.setObjectName("button_layout")
         self.back_button = QtWidgets.QPushButton(self.centralwidget)
         self.back_button.setObjectName("back_button")
@@ -83,7 +87,7 @@ class Ui_main_window(object):
         self.scrollArea.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 822, 538))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 972, 462))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -99,6 +103,20 @@ class Ui_main_window(object):
         self.test_grid_button.setSizePolicy(sizePolicy)
         self.test_grid_button.setMinimumSize(QtCore.QSize(200, 100))
         self.test_grid_button.setMaximumSize(QtCore.QSize(200, 100))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setItalic(False)
+        font.setUnderline(True)
+        font.setWeight(75)
+        font.setKerning(True)
+        self.test_grid_button.setFont(font)
+        self.test_grid_button.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.test_grid_button.setMouseTracking(False)
+        self.test_grid_button.setAutoFillBackground(False)
+        self.test_grid_button.setCheckable(False)
+        self.test_grid_button.setAutoDefault(False)
+        self.test_grid_button.setDefault(False)
+        self.test_grid_button.setFlat(False)
         self.test_grid_button.setObjectName("test_grid_button")
         self.main_grid.addWidget(self.test_grid_button, 0, 0, 1, 1)
         self.horizontalLayout.addLayout(self.main_grid)
@@ -112,13 +130,14 @@ class Ui_main_window(object):
 
     def retranslateUi(self, main_window):
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("main_window", "QTwindow"))
+        main_window.setWindowTitle(_translate("main_window", "Permission Manager"))
         self.show_dirs_checkbox.setText(_translate("main_window", "Show direcotries"))
         self.show_hidden_checkbox.setText(_translate("main_window", "Show hidden"))
+        self.altsort_checkbox.setText(_translate("main_window", "Alternative sort"))
         self.text_label.setText(_translate("main_window", "Text"))
         self.back_button.setText(_translate("main_window", "Back"))
         self.folder_perms_button.setText(_translate("main_window", "Folder Perms"))
-        self.test_grid_button.setText(_translate("main_window", "test"))
+        self.test_grid_button.setText(_translate("main_window", "testing"))
 
 
 if __name__ == "__main__":

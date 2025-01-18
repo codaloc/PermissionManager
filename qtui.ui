@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QTwindow</string>
+   <string>Permission Manager</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="layoutDirection">
@@ -60,6 +60,16 @@
            <widget class="QCheckBox" name="show_hidden_checkbox">
             <property name="text">
              <string>Show hidden</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="altsort_checkbox">
+            <property name="text">
+             <string>Alternative sort</string>
+            </property>
+            <property name="tristate">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -111,6 +121,9 @@
         </property>
         <property name="leftMargin">
          <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>8</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -197,8 +210,38 @@
                  <height>100</height>
                 </size>
                </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                 <underline>true</underline>
+                 <kerning>true</kerning>
+                </font>
+               </property>
+               <property name="cursor">
+                <cursorShape>ArrowCursor</cursorShape>
+               </property>
+               <property name="mouseTracking">
+                <bool>false</bool>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
                <property name="text">
-                <string>test</string>
+                <string>testing</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+               <property name="default">
+                <bool>false</bool>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
