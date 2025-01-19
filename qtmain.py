@@ -1,12 +1,40 @@
+# TODO
+# read toml file for default checkboxes states and config(like rewrite on resize and file sizes)
+# deal with permission issues
+# implement the actual permissions
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from qtui import Ui_main_window
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 import sys
 import os
-
+import toml
 
 def get_path_input():
     return ui.path_input.text().strip()
+
+
+def set_checkboxes_to_default():
+    with open("config.toml", "r") as file:
+        config = toml.load(file)
+        print(config["checkboxes_defaults"]["showdirs"])
+        print(config["checkboxes_defaults"]["showhidden"])
+        print(config["checkboxes_defaults"]["altsort"])
+
+        ui.show_dirs_checkbox.setChecked(config["checkboxes_defaults"]["showdirs"])
+        ui.show_hidden_checkbox.setChecked(config["checkboxes_defaults"]["showhidden"])
+        altsort_state = config["checkboxes_defaults"]["altsort"]
+        if altsort_state == 0:
+            ui.altsort_checkbox.setCheckState(Qt.Unchecked)
+        elif altsort_state == 1:
+            ui.altsort_checkbox.setCheckState(Qt.PartiallyChecked)
+        elif altsort_state == 2:
+            ui.altsort_checkbox.setCheckState(Qt.Checked)
+
+
+
+
+
 
 
 def get_file_list(path):
@@ -28,15 +56,15 @@ def get_file_list(path):
                 if show_dirs:
                     files.append((file, 0))
 
-        print(ui.altsort_checkbox.isTristate())
         check_state = ui.altsort_checkbox.checkState()
         if check_state == Qt.Unchecked:
             files.sort()
         elif check_state == Qt.PartiallyChecked:
-            files.sort(key=lambda x: x[1])
+            files.sort()
+            files.sort(key=lambda x: abs(x[1]-1))
         elif check_state == Qt.Checked:
+            files.sort()
             files.sort(key=lambda x: x[1])
-            files.reverse()
 
 
 
@@ -94,22 +122,47 @@ def create_dynamic_button2(button_name,isfile):
 
 def folder_clicked(name):
     old_path = get_path_input()
-    ui.path_input.setText(os.path.join(old_path, name))
-    draw_path_buttons()
+    newpath = os.path.join(old_path, name)
+    if os.path.isdir(newpath):
+        ui.path_input.setText(newpath)
+        draw_path_buttons()
+    else:
+        interacted_with_file()
 
 def back():
     path = ui.path_input.text()
     path_split = path.split("/")
-    print(path_split)
-    print(len(path_split))
     if len(path_split) == 2:
-        ui.path_input.setText("/")
+        newpath = "/"
     else:
-        ui.path_input.setText("/".join(path_split[:-1]))
+        newpath = "/".join(path_split[:-1])
+
+    ui.path_input.setText(newpath)
+    if os.path.exists(newpath):
         draw_path_buttons()
+    else:
+        path_input_color_alert()
 
+def path_input_color_alert():
+    ui.path_input.setStyleSheet("color: red;")
+    QTimer.singleShot(300, path_input_revert_to_black)
 
+def path_input_revert_to_black():
+    ui.path_input.setStyleSheet("")
 
+def shortcut_triggered():
+    if os.path.exists(get_path_input()):
+        if os.path.isdir:
+            draw_path_buttons()
+        else:
+            interacted_with_file()
+    else:
+        path_input_color_alert()
+
+def interacted_with_file():
+    path = get_path_input()
+    last_part = path.split("/")[-1]
+    ui.text_label.setText(last_part) 
 
 
 ############# create app
@@ -122,6 +175,7 @@ ui.path_input.setText("/")
 # could add option to toggle:
 ui.centralwidget.resizeEvent = lambda event: draw_path_buttons()
 
+set_checkboxes_to_default()
 ############# linking functions
 ui.back_button.clicked.connect(back)
 ui.folder_perms_button.clicked.connect(draw_path_buttons)
@@ -130,7 +184,7 @@ ui.show_hidden_checkbox.stateChanged.connect(draw_path_buttons)
 ui.altsort_checkbox.stateChanged.connect(draw_path_buttons)
 enter_action = QtWidgets.QAction("Enter", ui.path_input)
 enter_action.setShortcut(Qt.Key_Return)
-enter_action.triggered.connect(draw_path_buttons)
+enter_action.triggered.connect(shortcut_triggered)
 main_window.addAction(enter_action)
 
 ############# show and exit
