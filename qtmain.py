@@ -17,9 +17,6 @@ def get_path_input():
 def set_checkboxes_to_default():
     with open("config.toml", "r") as file:
         config = toml.load(file)
-        print(config["checkboxes_defaults"]["showdirs"])
-        print(config["checkboxes_defaults"]["showhidden"])
-        print(config["checkboxes_defaults"]["altsort"])
 
         ui.show_dirs_checkbox.setChecked(config["checkboxes_defaults"]["showdirs"])
         ui.show_hidden_checkbox.setChecked(config["checkboxes_defaults"]["showhidden"])
@@ -30,11 +27,6 @@ def set_checkboxes_to_default():
             ui.altsort_checkbox.setCheckState(Qt.PartiallyChecked)
         elif altsort_state == 2:
             ui.altsort_checkbox.setCheckState(Qt.Checked)
-
-
-
-
-
 
 
 def get_file_list(path):
@@ -78,7 +70,7 @@ def delete_widgets(layout):
     if layout is not None:
         for i in reversed(range(layout.count())):
             widget = layout.itemAt(i).widget()
-            if widget is not None:
+            if widget is not None and type(widget) == QtWidgets.QPushButton:
                 widget.setParent(None)
         layout.update()
 
@@ -93,7 +85,7 @@ def draw_path_buttons():
 def create_dynamic_button2(button_name,isfile):
     window_size = main_window.size()
     window_width = window_size.width()
-    margin = 100
+    margin = 110
     button_width = 200
     number_of_rows = (window_width - margin) // button_width
 
@@ -108,8 +100,8 @@ def create_dynamic_button2(button_name,isfile):
     sizePolicy.setHeightForWidth(new_grid_button.sizePolicy().hasHeightForWidth())
     new_grid_button.setSizePolicy(sizePolicy)
 
-    new_grid_button.setMinimumSize(QtCore.QSize(180, 120))
-    new_grid_button.setMaximumSize(QtCore.QSize(200, 100))
+    new_grid_button.setMinimumSize(QtCore.QSize(200,100))
+    new_grid_button.setMaximumSize(QtCore.QSize(280, 100))
     new_grid_button.setObjectName(f"button_{button_nb}")
     new_grid_button.setText(f"{button_name}")
 
@@ -127,7 +119,7 @@ def folder_clicked(name):
         ui.path_input.setText(newpath)
         draw_path_buttons()
     else:
-        interacted_with_file()
+        interacted_with_file(newpath)
 
 def back():
     path = ui.path_input.text()
@@ -155,15 +147,13 @@ def shortcut_triggered():
         if os.path.isdir:
             draw_path_buttons()
         else:
-            interacted_with_file()
+            interacted_with_file(get_path_input())
     else:
         path_input_color_alert()
 
-def interacted_with_file():
-    path = get_path_input()
+def interacted_with_file(path):
     last_part = path.split("/")[-1]
     ui.text_label.setText(last_part) 
-
 
 ############# create app
 app = QtWidgets.QApplication(sys.argv)
