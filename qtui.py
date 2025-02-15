@@ -15,7 +15,7 @@ class Ui_main_window(object):
     def setupUi(self, main_window):
         main_window.setObjectName("main_window")
         main_window.setEnabled(True)
-        main_window.resize(1008, 595)
+        main_window.resize(1008, 562)
         self.centralwidget = QtWidgets.QWidget(main_window)
         self.centralwidget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.centralwidget.setAutoFillBackground(False)

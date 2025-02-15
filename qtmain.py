@@ -7,8 +7,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from qtui import Ui_main_window
 from PyQt5.QtCore import Qt, QTimer
 import sys
-import os
 import toml
+import os
 
 def get_path_input():
     return ui.path_input.text().strip()
