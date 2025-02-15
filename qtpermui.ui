@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>740</width>
-    <height>546</height>
+    <height>408</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,6 +20,37 @@
    <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QLabel" name="file_label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>23</pointsize>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="text">
+      <string>Filename.tes</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,5,2">
      <property name="spacing">
@@ -53,7 +84,7 @@
          <property name="font">
           <font>
            <family>Monospace</family>
-           <pointsize>15</pointsize>
+           <pointsize>19</pointsize>
           </font>
          </property>
          <property name="text">
@@ -83,25 +114,25 @@
        <item>
         <widget class="QLabel" name="permission_string">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>100</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="font">
           <font>
            <family>Monospace</family>
-           <pointsize>15</pointsize>
+           <pointsize>20</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>---   ---   ---   (---)</string>
+          <string>---  ---  ---  (---)</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -430,9 +461,9 @@
         <number>20</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="get_button">
          <property name="text">
-          <string>PushButton</string>
+          <string>Get / Refresh Permissions</string>
          </property>
         </widget>
        </item>

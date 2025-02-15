@@ -1,13 +1,16 @@
 # TODO
-# read toml file for default checkboxes states and config(like rewrite on resize and file sizes)
+# add more option (size...) in toml size
 # deal with permission issues
+# deal with large folders
 # implement the actual permissions
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from qtui import Ui_main_window
 from PyQt5.QtCore import Qt, QTimer
-import sys
+from qtui import Ui_main_window
+from qtpermui import Ui_Dialog
+import subprocess
 import toml
+import sys
 import os
 
 def get_path_input():
@@ -152,8 +155,92 @@ def shortcut_triggered():
         path_input_color_alert()
 
 def interacted_with_file(path):
-    last_part = path.split("/")[-1]
-    ui.text_label.setText(last_part) 
+    print(path)
+    ui.text_label.setText(os.path.basename(path))
+    window_file_perms(path)
+
+
+
+
+
+############# permission window functions
+
+def window_file_perms(path):
+    print(path)
+    perm_ui.path = path
+    show_file_perms(path)
+    perm_window.exec() # order here is important, can set anything before showing
+
+
+
+def show_file_perms(path):
+    print(os.path.exists(path))
+    if os.path.exists(path):
+        command = f"stat {path} -c %a%A" # 755-rwxr-xr-x
+        result = subprocess.run(command, capture_output=True, check=True, shell=True)
+        output = result.stdout.decode().rstrip()
+
+        human = output[4:]
+        octal_perms = output[:3]
+        aired_human = ""
+        for i, char in enumerate(human):
+            if i % 3 == 0 and i != 0:
+                aired_human += ("  ")
+            aired_human += char
+        oneliner = f"{aired_human}  ({octal_perms})"
+
+        perm_ui.permission_string.setText(oneliner)
+        perm_ui.file_label.setText(os.path.basename(path))
+
+        set_checkboxes(perms_to_list(octal_perms))
+
+
+def perms_to_list(octalperms):
+    # ocal : [read, write, execute]
+    permdict = {
+        0: [False, False, False],
+        1: [False, False, True],
+        2: [False, True, False],
+        3: [False, True, True],
+        4: [True, False, False],
+        5: [True, False, True],
+        6: [True, True, False],
+        7: [True, True, True]
+    }
+
+    allperms = []
+
+    for char in octalperms:
+        allperms.append(permdict[int(char)])
+
+    return allperms
+
+def set_checkboxes(perm_list):
+    checkboxes_list = [
+        perm_ui.ur_checkbox,
+        perm_ui.uw_checkbox,
+        perm_ui.ue_checkbox,
+        perm_ui.gr_checkbox,
+        perm_ui.gw_checkbox,
+        perm_ui.ge_checkbox,
+        perm_ui.or_checkbox,
+        perm_ui.ow_checkbox,
+        perm_ui.oe_checkbox
+    ]
+
+    perm_order_nb=0
+    for user in perm_list:
+        for permission in user:
+
+            checkboxes_list[perm_order_nb].setChecked(permission)
+            #sperm_ui.ur_checkbox.setChecked(True)
+            perm_order_nb += 1
+
+
+
+
+
+
 
 ############# create app
 app = QtWidgets.QApplication(sys.argv)
@@ -162,11 +249,18 @@ ui = Ui_main_window()
 ui.setupUi(main_window)
 ui.path_input.setText("/")
 
+
+perm_window = QtWidgets.QDialog()
+perm_ui = Ui_Dialog()
+perm_ui.setupUi(perm_window)
+
+
+
 # could add option to toggle:
 ui.centralwidget.resizeEvent = lambda event: draw_path_buttons()
 
 set_checkboxes_to_default()
-############# linking functions
+############# linking functions (explorer)
 ui.back_button.clicked.connect(back)
 ui.folder_perms_button.clicked.connect(draw_path_buttons)
 ui.show_dirs_checkbox.stateChanged.connect(draw_path_buttons)
@@ -177,8 +271,13 @@ enter_action.setShortcut(Qt.Key_Return)
 enter_action.triggered.connect(shortcut_triggered)
 main_window.addAction(enter_action)
 
+############# linking functions (permissions)
+perm_ui.get_button.clicked.connect(lambda: show_file_perms(perm_ui.path))
+
+
 ############# show and exit
 main_window.show()
+#perm_window.exec()
 
 draw_path_buttons()
 
