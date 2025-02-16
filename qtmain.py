@@ -155,9 +155,12 @@ def shortcut_triggered():
         path_input_color_alert()
 
 def interacted_with_file(path):
-    print(path)
-    ui.text_label.setText(os.path.basename(path))
     window_file_perms(path)
+
+def permission_of_folder():
+    path = ui.path_input.text()
+    window_file_perms(path)
+
 
 
 
@@ -166,15 +169,28 @@ def interacted_with_file(path):
 ############# permission window functions
 
 def window_file_perms(path):
-    print(path)
     perm_ui.path = path
     show_file_perms(path)
-    perm_window.exec() # order here is important, can set anything before showing
+    perm_window.exec() # works in this order (?)
+    perm_ui.command_line.hide()
+    perm_ui.command_label.hide()
+    perm_ui.command_label.setText("Command :")
+    perm_ui.run_button.setEnabled(False)
+
+
+def show_modified_perms():
+    human_readable_aired, octal = get_readable_and_octal_from_list(get_checkboxes_values())
+    oneliner = f"{human_readable_aired}  ({octal})"
+    perm_ui.permission_string.setText(oneliner)
+
+    #changes command in case it is visible
+    human_readable_aired, octal = get_readable_and_octal_from_list(get_checkboxes_values())
+    command = f"chmod {octal} {perm_ui.path}"
+    perm_ui.command_line.setText(command)
 
 
 
 def show_file_perms(path):
-    print(os.path.exists(path))
     if os.path.exists(path):
         command = f"stat {path} -c %a%A" # 755-rwxr-xr-x
         result = subprocess.run(command, capture_output=True, check=True, shell=True)
@@ -237,7 +253,89 @@ def set_checkboxes(perm_list):
             perm_order_nb += 1
 
 
+def get_checkboxes_values():
+    perms_list = []
+    perms_list.append([perm_ui.ur_checkbox.isChecked(), perm_ui.uw_checkbox.isChecked(), perm_ui.ue_checkbox.isChecked()])
+    perms_list.append([perm_ui.gr_checkbox.isChecked(), perm_ui.gw_checkbox.isChecked(), perm_ui.ge_checkbox.isChecked()])
+    perms_list.append([perm_ui.or_checkbox.isChecked(), perm_ui.ow_checkbox.isChecked(), perm_ui.oe_checkbox.isChecked()])
+    return perms_list
 
+def get_readable_and_octal_from_list(perms_list):
+    bool_dict = {
+        (False, False, False): 0,
+        (False, False, True): 1,
+        (False, True, False): 2,
+        (False, True, True): 3,
+        (True, False, False): 4,
+        (True, False, True): 5,
+        (True, True, False): 6,
+        (True, True, True): 7
+    }
+    human_readable_dict = {
+        "0": "---",
+        "1": "--x",
+        "2": "-w-",
+        "3": "-wx",
+        "4": "r--",
+        "5": "r-x",
+        "6": "rw-",
+        "7": "rwx"
+    }
+
+    octalperms = ""
+    human_readable = []
+
+    for subperm in perms_list:
+        octalperms += str(bool_dict[tuple(subperm)])
+
+    for oct in octalperms:
+        human_readable.append(human_readable_dict[oct])
+    human_readable = "  ".join(human_readable)
+
+    return human_readable, octalperms
+
+def show_command():
+    human_readable_aired, octal = get_readable_and_octal_from_list(get_checkboxes_values())
+    command = f"chmod {octal} {perm_ui.path}"
+    perm_ui.command_line.show()
+    perm_ui.command_label.show()
+    perm_ui.command_line.setText(command)
+
+
+    perm_ui.run_button.setEnabled(True)
+
+def manually_changed_command():
+    perm_ui.command_label.setText("Command (edited) :")
+
+
+def command_failed_color_alert():
+    perm_ui.command_line.setStyleSheet("color: red;")
+    QTimer.singleShot(400, command_failed_alert_revert)
+
+def command_failed_alert_revert():
+    perm_ui.command_line.setStyleSheet("")
+
+
+def command_success_color_alert():
+    perm_ui.file_label.setStyleSheet("color: green;")
+    QTimer.singleShot(1000, command_success_alert_revert)
+
+def command_success_alert_revert():
+    perm_ui.file_label.setStyleSheet("")
+
+
+
+def run_command():
+    command = perm_ui.command_line.text()
+    print(f"running {command}")
+    try:
+        result = subprocess.run(command, capture_output=True, check=True, shell=True)
+        perm_ui.command_line.hide()
+        perm_ui.command_label.hide()
+        perm_ui.run_button.setEnabled(False)
+        command_success_color_alert()
+    except:
+        command_failed_color_alert()
 
 
 
@@ -253,6 +351,8 @@ ui.path_input.setText("/")
 perm_window = QtWidgets.QDialog()
 perm_ui = Ui_Dialog()
 perm_ui.setupUi(perm_window)
+perm_ui.command_line.hide()
+perm_ui.command_label.hide()
 
 
 
@@ -266,6 +366,8 @@ ui.folder_perms_button.clicked.connect(draw_path_buttons)
 ui.show_dirs_checkbox.stateChanged.connect(draw_path_buttons)
 ui.show_hidden_checkbox.stateChanged.connect(draw_path_buttons)
 ui.altsort_checkbox.stateChanged.connect(draw_path_buttons)
+ui.folder_perms_button.clicked.connect(permission_of_folder)
+
 enter_action = QtWidgets.QAction("Enter", ui.path_input)
 enter_action.setShortcut(Qt.Key_Return)
 enter_action.triggered.connect(shortcut_triggered)
@@ -273,6 +375,21 @@ main_window.addAction(enter_action)
 
 ############# linking functions (permissions)
 perm_ui.get_button.clicked.connect(lambda: show_file_perms(perm_ui.path))
+
+perm_ui.ur_checkbox.clicked.connect(show_modified_perms)
+perm_ui.uw_checkbox.clicked.connect(show_modified_perms)
+perm_ui.ue_checkbox.clicked.connect(show_modified_perms)
+perm_ui.gr_checkbox.clicked.connect(show_modified_perms)
+perm_ui.gw_checkbox.clicked.connect(show_modified_perms)
+perm_ui.ge_checkbox.clicked.connect(show_modified_perms)
+perm_ui.or_checkbox.clicked.connect(show_modified_perms)
+perm_ui.ow_checkbox.clicked.connect(show_modified_perms)
+perm_ui.oe_checkbox.clicked.connect(show_modified_perms)
+
+perm_ui.change_button.clicked.connect(show_command)
+perm_ui.command_line.textEdited.connect(manually_changed_command)
+perm_ui.run_button.clicked.connect(run_command)
+
 
 
 ############# show and exit

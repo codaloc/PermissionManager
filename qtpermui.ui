@@ -52,12 +52,12 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,5,2">
+    <layout class="QVBoxLayout" name="perms_layout" stretch="1,1,5,2">
      <property name="spacing">
       <number>0</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="perms_label_layout">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -98,7 +98,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="perms_values_layout">
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
@@ -142,7 +142,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,0,0,0" columnstretch="1,0,0,0,0">
+      <layout class="QGridLayout" name="grid_layout" rowstretch="1,0,0,0" columnstretch="1,0,0,0,0">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
        </property>
@@ -468,20 +468,49 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="change_button">
          <property name="text">
-          <string>PushButton</string>
+          <string>Change Permissions</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="run_button">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
-          <string>PushButton</string>
+          <string>Run Command</string>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="command_layout">
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="command_label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Command : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="command_line">
+       <property name="echoMode">
+        <enum>QLineEdit::Normal</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
