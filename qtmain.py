@@ -1,5 +1,4 @@
 # TODO
-# add more option (size...) in toml size
 # deal with permission issues
 # deal with large folders
 
@@ -84,26 +83,33 @@ def draw_path_buttons():
     for file in files:
         create_dynamic_button2(file[0],file[1])
 
+
 def create_dynamic_button2(button_name,isfile):
+    global FILE_TARGET_SIZE, FILE_HEIGHT, FILE_FONT_SIZE
     window_size = main_window.size()
     window_width = window_size.width()
-    margin = 110
-    button_width = 200
-    number_of_rows = (window_width - margin) // button_width
+    pseudo_margin = 0
+    min_button_width = 0
+    max_button_width = int(FILE_TARGET_SIZE*1.5)
+    number_of_rows = (window_width - pseudo_margin) // FILE_TARGET_SIZE
 
     button_nb = len(ui.scrollAreaWidgetContents.findChildren(QtWidgets.QPushButton))
     row = button_nb // number_of_rows
     column = button_nb % number_of_rows
 
     new_grid_button = QtWidgets.QPushButton(ui.scrollAreaWidgetContents)
-    sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(new_grid_button.sizePolicy().hasHeightForWidth())
-    new_grid_button.setSizePolicy(sizePolicy)
+    size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(new_grid_button.sizePolicy().hasHeightForWidth())
+    new_grid_button.setSizePolicy(size_policy)
 
-    new_grid_button.setMinimumSize(QtCore.QSize(200,100))
-    new_grid_button.setMaximumSize(QtCore.QSize(280, 100))
+    font = QtGui.QFont()
+    font.setPointSize(FILE_FONT_SIZE)
+    new_grid_button.setFont(font)
+
+    new_grid_button.setMinimumSize(QtCore.QSize(min_button_width, FILE_HEIGHT))
+    new_grid_button.setMaximumSize(QtCore.QSize(max_button_width, FILE_HEIGHT))
     new_grid_button.setObjectName(f"button_{button_nb}")
     new_grid_button.setText(f"{button_name}")
 
@@ -188,7 +194,6 @@ def show_modified_perms():
     perm_ui.command_line.setText(command)
 
 
-
 def show_file_perms(path):
     if os.path.exists(path):
         command = f"stat {path} -c %a%A" # 755-rwxr-xr-x
@@ -230,6 +235,7 @@ def perms_to_list(octalperms):
 
     return allperms
 
+
 def set_checkboxes(perm_list):
     checkboxes_list = [
         perm_ui.ur_checkbox,
@@ -258,6 +264,7 @@ def get_checkboxes_values():
     perms_list.append([perm_ui.gr_checkbox.isChecked(), perm_ui.gw_checkbox.isChecked(), perm_ui.ge_checkbox.isChecked()])
     perms_list.append([perm_ui.or_checkbox.isChecked(), perm_ui.ow_checkbox.isChecked(), perm_ui.oe_checkbox.isChecked()])
     return perms_list
+
 
 def get_readable_and_octal_from_list(perms_list):
     bool_dict = {
@@ -293,6 +300,7 @@ def get_readable_and_octal_from_list(perms_list):
 
     return human_readable, octalperms
 
+
 def show_command():
     human_readable_aired, octal = get_readable_and_octal_from_list(get_checkboxes_values())
     command = f"chmod {octal} {perm_ui.path}"
@@ -302,6 +310,7 @@ def show_command():
 
 
     perm_ui.run_button.setEnabled(True)
+
 
 def manually_changed_command():
     perm_ui.command_label.setText("Command (edited) :")
@@ -340,6 +349,14 @@ def run_command():
 
 
 ############# create app
+
+with open("config.toml", "r") as file:
+    config = toml.load(file)
+    FILE_TARGET_SIZE = config["files"]["file_target_size"]
+    FILE_HEIGHT = config["files"]["file_height"]
+    FILE_FONT_SIZE = config["files"]["file_font_size"]
+
+
 app = QtWidgets.QApplication(sys.argv)
 main_window = QtWidgets.QMainWindow()
 ui = Ui_main_window()

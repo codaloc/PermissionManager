@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>562</height>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,6 +134,9 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QScrollArea" name="scrollArea">
          <property name="frameShape">
@@ -141,6 +144,9 @@
          </property>
          <property name="frameShadow">
           <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -154,7 +160,7 @@
             <x>0</x>
             <y>0</y>
             <width>972</width>
-            <height>129</height>
+            <height>111</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -164,13 +170,16 @@
            </sizepolicy>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <layout class="QGridLayout" name="main_grid">
              <property name="sizeConstraint">
               <enum>QLayout::SetMinimumSize</enum>
              </property>
              <property name="bottomMargin">
-              <number>10</number>
+              <number>0</number>
              </property>
              <property name="spacing">
               <number>10</number>

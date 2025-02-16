@@ -2,3 +2,7 @@
 showdirs = true
 showhidden = false
 altsort = 1
+[files]
+file_target_size = 230
+file_height = 100
+file_font_size = 11
