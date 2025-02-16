@@ -2,7 +2,6 @@
 # add more option (size...) in toml size
 # deal with permission issues
 # deal with large folders
-# implement the actual permissions
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QTimer
