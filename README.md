@@ -3,7 +3,7 @@
 <h1>Hectic Permissions Manger</h1>
 
 <h3>
-  Linux / Unix Permissions Explorer and Editor<br/>
+  Linux / Unix Permissions Explorer and Editor in Qt<br/>
 </h3>
 <img src="https://img.shields.io/badge/maintainer-codaloc-yellow">
 <img src="https://img.shields.io/badge/Beta-yes-blue?logo=github&logoColor=white">
@@ -14,36 +14,38 @@
   <a href="#">Preview</a> •
   <a href="#">Features</a> •
   <a href="#">Configuration</a> •
-  <a href="#">To Do</a>
+  <a href="#">To Do</a> •
+  <a href="#">Tk archive Preview</a>
+ 
 </p>
 </div>
 
 ## Preview
-<img src="imgs/preview.png">
-<img src="imgs/screen2.png">
+<img src="imgs/qtpreview.png">
+
 
 ## Features
 ### File Explorer
 - Typical file explorer to traverse directories
 - Path can be edited manually via the text box and the return key
-- Option to hide/show hidden files
-- Option to hide/show directories
-- `Back` button to go back a directory
+- Option to hide/show hidden files and directories
+- Alternative sorting with separation between files and folders
 ### Permissions Editor
-- Files and Directories can be edited
+- Files and Directories permissions can be edited
 - Human and octal permissions previews
 - Permissions can be edited via Read, Write and Execute checkboxes for User, Group and Other
-- New permissions can be previewed via the `Preview Perms` button
-- Permissions can changed via the `Preview Command` + `Run` button
-- Command preview with via the `Preview Command` button
+- Command preview with via the `Change Permission` button
+- Visual feedback of command return status
 
 ## To Do
 - Autocorrect of capitalization of file/directory names
-- scrollbar
-- since grab is prevented, add close/ok/done button to permission editor
-- file size control
-- config via TOML file
+- More settings in toml
 - View and edit file/folder ownership
 - Run privileged commands via sudo
-- Update preview
-- Reimplement in Qt
+- Optimise for large folders
+
+
+## Preview of initial implementation in Tk
+<img src="imgs/preview.png" width="500px">
+<img src="imgs/screen2.png" width="500px">
+
